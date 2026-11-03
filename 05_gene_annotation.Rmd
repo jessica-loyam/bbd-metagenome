@@ -20,6 +20,52 @@ knitr::opts_hooks$set(engine = function(options) {
 <!--
 Explain what this step does and why, and copy each command you ran into a
 bash chunk. R chunks run from the top of the repository.
+
+Answer: This step uses Prokka to predict and identify genes present in the genome bins. It compares predicted protein sequences with databases of known proteins to identify homologous genes and assign possible functions. This helps us understand the potential functions of the microorganisms.
 -->
 
 Gene prediction and annotation of the most complete bins with Prokka. Commands for this step were run in `prokka/`.
+
+Change directory to prokka:
+```bash
+cd ~/bbd-metagenome/prokka
+```
+Try running prokka for a single bin: observation of steps:
+```bash
+cat ../checkm/bbd_topbins.txt
+```
+Next pick a bin to test with. Look at the list of bins you made in step 5: metabat.30
+
+These instructions use metabat.5, substitute id where appropriate:
+```bash
+bin=metabat.30
+prokka --cpus 2 --outdir $bin --prefix $bin  ../metabat/bins_bbd/${bin}.fa
+```
+Note: --cpus 2 option stops prokka from using more than two CPUs
+      This command runs on the RStudio server itself, which everyone in the class shares.
+      
+List contents for metabat.30:
+```bash 
+ls metabat.30
+```
+Run prokka on all the metagenomes within a slurm job:
+```bash 
+#!/bin/bash
+#SBATCH --time=90
+#SBATCH --cpus-per-task=2 --mem=2gb
+
+echo "Starting prokka in $(pwd) at $(date)"
+
+shopt -s expand_aliases
+alias prokka='apptainer run -B /pvol/:/pvol /pvol/data/sif/prokka.sif prokka'
+
+while read bin;do 
+  prokka --cpus 2 --outdir $bin --prefix $bin "../metabat/bins_bbd/${bin}.fa";
+done < ../checkm/bbd_topbins.txt
+
+echo "Finished prokka in $(pwd) at $(date)"
+```
+Submit job: 
+```bash 
+sbatch run_prokka.sh
+```

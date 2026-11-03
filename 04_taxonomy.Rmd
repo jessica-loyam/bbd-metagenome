@@ -21,7 +21,59 @@ knitr::opts_hooks$set(engine = function(options) {
 Explain what this step does and why, and copy each command you ran into a
 bash chunk. R chunks run from the top of the repository.
 
-Answer: 
+Answer: Using GTDB-Tk  and a reference database to assign taxonomic classifications to the most complete bins. This helps identify which microorganisms are present in the Black Bland Disease sample.  
 -->
 
 Taxonomic classification of the most complete bins with GTDB-Tk. Commands for this step were run in `gtdbtk/`.
+
+Change directory to gtdbtk folder: 
+```bash
+cd ~/bbd-metagenome/gtdbtk
+```
+Copy of the topbins a file that corresponds to that bin into genome folder: Code broken down:
+Get the while loop working:
+```bash
+while read bin;do echo $bin;done < ../checkm/bbd_topbins.txt
+```
+Turn this bin name into a path specifying the fasta file for the bin:
+```bash
+while read bin;do echo "../metabat/bins_bbd/${bin}.fa";done < ../checkm/bbd_topbins.txt
+```
+Copy bin to genome: 
+```bash
+while read bin;do cp "../metabat/bins_bbd/${bin}.fa" genomes;done < ../checkm/bbd_topbins.txt
+```
+Listing files in genome: 
+```bash 
+ls genomes
+```
+Run the classification workflow within a slurm job: 
+```bash 
+#!/bin/bash
+#SBATCH --time=120
+#SBATCH --cpus-per-task=2 --mem=56gb
+
+echo "Starting gtdbtk in $(pwd) at $(date)"
+
+shopt -s expand_aliases
+alias gtdbtk='apptainer run -B /pvol:/pvol,/pvol/data/mg/gtdbtkdata/release207_v2/:/refdata /pvol/data/sif/gtdbtk.sif'
+
+gtdbtk classify_wf -x fa --cpus 2 --genome_dir genomes --out_dir out --skip_ani_screen
+
+echo "Finished gtdbtk in $(pwd) at $(date)"
+```
+Submit job: 
+```bash 
+sbatch run_gtdbtk.sh
+```
+If job finished, check summary of classification produced in directory: 
+```bash
+ls -l out/gtdbtk.bac120.summary.tsv
+```
+
+Copy summary into gtdbtk folder:
+```bash
+cp out/gtdbtk.bac120.summary.tsv .
+```
+
+

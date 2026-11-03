@@ -20,6 +20,118 @@ knitr::opts_hooks$set(engine = function(options) {
 <!--
 Explain what this step does and why, and copy each command you ran into a
 bash chunk. R chunks run from the top of the repository.
+
+Answer: This step uses MinPath to analyse the functional annotations of individual genes predicted by Prokka and infer broader metabolic pathways. This helps identify the potential metabolic capabilities of the assembled genome bins and explain the presence of those genes. 
 -->
 
 Metabolic pathways inferred from the Prokka annotations with MinPath. Commands for this step were run in `minpath/`.
+
+
+Change directory to minpath folder:
+```bash
+cd ~/bbd-metagenome/minpath
+```
+
+
+Inputs for minpath prepared for each bin on the prokka .tsv file: Start by looking at a single bin:
+```bash
+head ../prokka/metabat.30/metabat.30.tsv
+```
+
+
+Input to minipath, transforming the tsv file using awk.
+Inputs: unique ID (col 1) and EC number (col 5)
+```bash
+head ../prokka/metabat.30/metabat.30.tsv | awk -F '\t' '{print $1,$5}'
+```
+
+
+Use -F '\t' to tell awk the input is tab separated: require lines with EC number:
+```bash
+head ../prokka/metabat.30/metabat.30.tsv | awk -F '\t' '$5{print $1,$5}'
+```
+
+
+Ensure output is tab separated: remove the header line:
+```bash
+head ../prokka/metabat.30/metabat.30.tsv | awk -F '\t' '$5{OFS="\t";print $1,$5}' | grep -v '^locus'
+```
+
+
+Replace head to cat to include all genes instead of the first 10:
+```bash
+cat ../prokka/metabat.30/metabat.30.tsv | awk -F '\t' '$5{OFS="\t";print $1,$5}' | grep -v '^locus'
+```
+
+
+Send output to a file to be used as input for minpath:
+```bash
+cat ../prokka/metabat.30/metabat.30.tsv | awk -F '\t' '$5{OFS="\t";print $1,$5}' | grep -v '^locus' > metabat.30.ec
+```
+
+
+Now run minpath on this file as follows;
+```bash
+minpath -ec metabat.30.ec -report metabat.30.ec.report -details metabat.30.ec.details
+```
+
+
+Take a look at the top few lines of output:
+```bash
+head metabat.30.ec.report 
+```
+
+
+Check prokka job: 
+```bash
+tail ../prokka/slurm-517.out
+```
+
+
+When prokka is done, prepare minipath inputs for all bins:
+```bash 
+while read bin;do 
+  cat ../prokka/$bin/${bin}.tsv | awk -F '\t' '$5{printf("%s\t%s\n", $1,$5)}' | grep -v '^locus' > ${bin}.ec 
+done < ../checkm/bbd_topbins.txt
+```
+
+Run minpath on every bin:
+```bash 
+while read bin;do 
+  minpath -ec ${bin}.ec -report ${bin}.ec.report -details ${bin}.ec.details
+done < ../checkm/bbd_topbins.txt
+```
+
+Search for PWY-101 (named photosynthesis light reaction) pathway across all the bins:PWY-101 Includes essential components for photosynthesis:
+```bash 
+grep 'PWY-101' *.ec.report
+```
+
+Question 4.1
+How many bins contain at least one gene from this pathway?
+Answer:
+
+Which bin has all of the genes (ie a complete pathway)?
+Answer: 
+
+For which bins does minpath keep the pathway (minpath 1)?
+Answer: 
+
+
+
+Cross reference your results with the output from gtdbtk: Taxonomy of bins containing this pathway: 
+
+```bash
+grep 'metabat.30' ../gtdbtk/gtdbtk.bac120.summary.tsv
+```
+
+Question 4.2
+How many bins contain the pathway PWY-5360?
+Answer: 
+
+What order (in a taxonomic sense) do these bins belong to? Are they in the same family?
+Answer:
+
+How strong is the evidence that these bins really have this pathway? Look at the fam-found and minpath columns.
+Answer: 
+
