@@ -21,7 +21,7 @@ knitr::opts_hooks$set(engine = function(options) {
 Explain what this step does and why, and copy each command you ran into a
 bash chunk. R chunks run from the top of the repository.
 
-Answer: This step groups similar contigs into bins, each bin for a specie or a strain, aiming to group assembled contigs to their genome of origin from the data. 
+Answer: This step groups similar contigs into bins, each bin in theory corresponding to a species or a strain, aiming to group assembled contigs to their genome of origin from the data. 
 -->
 
 Binning of the assembled contigs into genomes with MetaBAT 2. Commands for this step were run in `metabat/`.

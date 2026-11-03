@@ -20,6 +20,8 @@ knitr::opts_hooks$set(engine = function(options) {
 <!--
 Explain what this step does and why, and copy each command you ran into a
 bash chunk. R chunks run from the top of the repository.
+
+Answer: 
 -->
 
 Taxonomic classification of the most complete bins with GTDB-Tk. Commands for this step were run in `gtdbtk/`.
