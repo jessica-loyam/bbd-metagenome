@@ -109,14 +109,13 @@ grep 'PWY-101' *.ec.report
 
 Question 4.1
 How many bins contain at least one gene from this pathway?
-Answer:
+Answer:5 bins
 
 Which bin has all of the genes (ie a complete pathway)?
-Answer: 
+Answer: metabat.30, 4 gene families were found from the pathway in this genome. Having all 4 of the genes found. 
 
 For which bins does minpath keep the pathway (minpath 1)?
-Answer: 
-
+Answer:metabat.19, metabat.30, metabat.9
 
 
 Cross reference your results with the output from gtdbtk: Taxonomy of bins containing this pathway: 
@@ -127,11 +126,12 @@ grep 'metabat.30' ../gtdbtk/gtdbtk.bac120.summary.tsv
 
 Question 4.2
 How many bins contain the pathway PWY-5360?
-Answer: 
+Answer: 1
 
 What order (in a taxonomic sense) do these bins belong to? Are they in the same family?
-Answer:
+Answer: 
+K_bacteria, there was no other bins that had the pathway PWY-5360
 
 How strong is the evidence that these bins really have this pathway? Look at the fam-found and minpath columns.
-Answer: 
+Answer: Quite weak as most of the bins have been decidided by minipath, that the genes found are better explained by other pathways. 
 
