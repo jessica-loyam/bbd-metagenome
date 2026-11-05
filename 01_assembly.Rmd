@@ -31,6 +31,8 @@ Change directory into flye, then a make a symbolic link to the bbd read data:
 cd ~/bbd-metagenome/flye
 ln -s /pvol/data/metagenome_assembly/bbd_0.1.fastq.gz
 ```
+
+
 Run flye within a slurm job:
 ```bash
 #!/bin/bash
@@ -43,14 +45,18 @@ flye --nano-hq bbd_0.1.fastq.gz --threads 12 --out-dir bbd --meta
 
 echo "Finished flye bbd in $(pwd) at $(date)"
 ```
+
 Submit job:
 ```bash
 sbatch run_flye_bbd.sh
 ```
+
 Monitoring job: 
 ```bash
 squeue
 ```
+
+
 check the flye worked: 
 ```bash
 sacct -j 501 --format=JobID,State,MaxRSS,Elapsed

@@ -4,6 +4,12 @@
 This README is the front page of your repository on GitHub. Replace this
 template text with your own introduction. A few sentences is enough: what
 the data are, what you did with them and what you found.
+
+This analysis used metagenomic data from Black Band Disease (BBD) samples to identify microbial species and their potential metabolic pathways. 
+The workflow involved genome assembly, binning, quality assessment, taxonomic classification, gene annotation, and metabolic pathway analysis. 
+Using the tools Flye, MetaBAT2, CheckM, GTDB-Tk, Prokka, and MinPath. 
+From bin quality checks, bin metabat_30 showed high completeness (97.56%) and low contamination (0.67%) and was identified as Roseofilum reptotaenium, known as a primary pathogenic component of the Black Band Disease. 
+Several bins contained genes associated with photosynthesis, providing insights into the potential metabolic functions of BBD microorganisms.
 -->
 
 Assembly, binning and functional analysis of a nanopore metagenome from black band disease (BBD) on the coral *Acropora hyacinthus*, done for [Workshop 4](https://mb5370.bioinformatics.guide/workshop4.html) of the MB5370 Marine Genomics module.

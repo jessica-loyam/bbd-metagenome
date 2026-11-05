@@ -1,6 +1,6 @@
 ---
 title: "BBD Metagenome: Gene Annotation"
-author: "Your Name"
+author: "Jessica Loyam"
 date: "`r Sys.Date()`"
 output:
   github_document:
@@ -30,10 +30,14 @@ Change directory to prokka:
 ```bash
 cd ~/bbd-metagenome/prokka
 ```
+
+
 Try running prokka for a single bin: observation of steps:
 ```bash
 cat ../checkm/bbd_topbins.txt
 ```
+
+
 Next pick a bin to test with. Look at the list of bins you made in step 5: metabat.30
 
 These instructions use metabat.5, substitute id where appropriate:
@@ -44,10 +48,13 @@ prokka --cpus 2 --outdir $bin --prefix $bin  ../metabat/bins_bbd/${bin}.fa
 Note: --cpus 2 option stops prokka from using more than two CPUs
       This command runs on the RStudio server itself, which everyone in the class shares.
       
+
 List contents for metabat.30:
 ```bash 
 ls metabat.30
 ```
+
+
 Run prokka on all the metagenomes within a slurm job:
 ```bash 
 #!/bin/bash
@@ -65,6 +72,7 @@ done < ../checkm/bbd_topbins.txt
 
 echo "Finished prokka in $(pwd) at $(date)"
 ```
+
 Submit job: 
 ```bash 
 sbatch run_prokka.sh

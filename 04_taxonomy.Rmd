@@ -1,6 +1,6 @@
 ---
 title: "BBD Metagenome: Taxonomy"
-author: "Your Name"
+author: "Jessica Loyam"
 date: "`r Sys.Date()`"
 output:
   github_document:
@@ -30,23 +30,33 @@ Change directory to gtdbtk folder:
 ```bash
 cd ~/bbd-metagenome/gtdbtk
 ```
+
+
 Copy of the topbins a file that corresponds to that bin into genome folder: Code broken down:
 Get the while loop working:
 ```bash
 while read bin;do echo $bin;done < ../checkm/bbd_topbins.txt
 ```
+
+
 Turn this bin name into a path specifying the fasta file for the bin:
 ```bash
 while read bin;do echo "../metabat/bins_bbd/${bin}.fa";done < ../checkm/bbd_topbins.txt
 ```
+
+
 Copy bin to genome: 
 ```bash
 while read bin;do cp "../metabat/bins_bbd/${bin}.fa" genomes;done < ../checkm/bbd_topbins.txt
 ```
+
+
 Listing files in genome: 
 ```bash 
 ls genomes
 ```
+
+
 Run the classification workflow within a slurm job: 
 ```bash 
 #!/bin/bash
@@ -62,14 +72,17 @@ gtdbtk classify_wf -x fa --cpus 2 --genome_dir genomes --out_dir out --skip_ani_
 
 echo "Finished gtdbtk in $(pwd) at $(date)"
 ```
+
 Submit job: 
 ```bash 
 sbatch run_gtdbtk.sh
 ```
+
 If job finished, check summary of classification produced in directory: 
 ```bash
 ls -l out/gtdbtk.bac120.summary.tsv
 ```
+
 
 Copy summary into gtdbtk folder:
 ```bash
